@@ -16,7 +16,7 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame(LoginListener argListener) {
     	this.listener = argListener;
-        setTitle("Login");
+        setTitle("Login as Staff");
         setSize(350, 200);
         setLocationRelativeTo(null);   // center window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,8 +49,10 @@ public class LoginFrame extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
 
         loginButton = new JButton("Login");
+        loginButton.setBackground(Color.GREEN);
+        loginButton.setForeground(Color.WHITE);
         panel.add(loginButton, gbc);
-
+        
         add(panel);
 
         // button action

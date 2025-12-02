@@ -14,6 +14,65 @@
 			<folderitem>
 				<path>src</path>
 			</folderitem>
+			<folderitem>
+				<path>assets</path>
+			</folderitem>
 		</project>
 	</projects>
+	<open_files>
+		<docitem>
+			<path>src\luloy.java</path>
+			<source>true</source>
+			<index>0</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\LoginFrame.java</path>
+			<source>true</source>
+			<index>1</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\database.java</path>
+			<source>true</source>
+			<index>2</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\RoomsPage.java</path>
+			<source>true</source>
+			<index>3</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\GuestPage.java</path>
+			<source>true</source>
+			<index>4</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\ReservationPage.java</path>
+			<source>true</source>
+			<index>5</index>
+			<active>true</active>
+		</docitem>
+		<docitem>
+			<path>src\Guest.java</path>
+			<source>true</source>
+			<index>6</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\Reserve.java</path>
+			<source>true</source>
+			<index>7</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\Room.java</path>
+			<source>true</source>
+			<index>8</index>
+			<active>false</active>
+		</docitem>
+	</open_files>
 </workspace_user>
