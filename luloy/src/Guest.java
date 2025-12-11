@@ -1,18 +1,11 @@
-/**
- * @(#)Guest.java
- *
- *
- * @author 
- * @version 1.00 2025/11/28
- */
-
-
 public class Guest {
 	
 	private String name = "";
 	private String email = "";
 	private String contact = "";
 	private String id = "";
+	private Room room;
+	private int status = 0;
 	
     public Guest(String guestName, String guestEmail, String guestContact) {
     	if (guestName.isEmpty() || guestEmail.isEmpty() || guestContact.isEmpty()){
@@ -39,5 +32,23 @@ public class Guest {
    public String getContact() {
    	return this.contact;
    }
+   
+   public void setRoom (Room newRoom){
+   	this.room = newRoom;
+   }
+   public void setStatus (int stat){
+   	this.status = stat;
+   }
+   public int getStatus (){
+   	return  this.status;
+   }
+   public Room getRoom (){
+   	return this.room;
+   }
     
 }
+
+
+
+
+

@@ -3,12 +3,17 @@
  *
  * luloy application
  */
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.function.Supplier;
-
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.io.File;
+import javax.swing.border.*;
 
 
 public class luloy {
@@ -17,19 +22,21 @@ public class luloy {
     private static JPanel leftPanel = new JPanel();
     private static JPanel centerPanel = new JPanel();
     private static JPanel topPanel = new JPanel();
-    private static HashMap<String, Supplier<JPanel>> pageData = new HashMap<>();
+    private static LinkedHashMap<String, Supplier<JPanel>> pageData = new LinkedHashMap<>();
+    private static HashMap<String, String> pageIcon = new HashMap<>();
     
-    
+    private static String defaultPage = "Reservation";
     
     //Dev Configurations
     private static boolean bypassLogin = true;
     
-
     public static void main(String[] args) {
+    	
     	if (!bypassLogin){
 	        SwingUtilities.invokeLater(() -> {
 	            new LoginFrame(stat -> {
 	                System.out.println("Logged status: " + stat);
+	                
 	                if (stat.equals("SUCCESS")) {
 	                    runApplication();
 	                } else {
@@ -46,56 +53,76 @@ public class luloy {
         InitiateDatabase();
         
         //Default page section
-        
         topPanel.setBackground(Color.decode("#548A70"));
         leftPanel.setBackground(Color.decode("#548A70"));
+        String path = "C:/Users/Alexander/OneDrive/Documents/JCreator LE/MyProjects/luloy/src/resort.png";
+		ImageIcon icon = new ImageIcon(path);
+		JLabel userIcon = new JLabel();
+        userIcon.setPreferredSize(new Dimension(50,50));
         
-        
+        Image img = icon.getImage();
+		Image scaled = img.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+		userIcon.setIcon(new ImageIcon(scaled));
+		
+		
         main.setTitle("Main Page");
-        //main.setLocationRelativeTo(null);
+       
         main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        main.setSize(800, 500);
+        main.setSize(800, 600);
+        main.setLocationRelativeTo(null);
         main.setVisible(true);
         main.setLayout(new BorderLayout(5, 5));
-		
-		/*
-		ImageIcon icon = new ImageIcon(main.getClass().getResource("/user.png"));
-		JLabel userIcon = new JLabel(icon);
-		userIcon.setPreferredSize(new Dimension(50,50));
-		*/
-        JLabel GreetingsText = new JLabel("Hello, {User}!");
+        main.setIconImage(icon.getImage());
+		//userIcon.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		topPanel.add(userIcon);
+
+		LocalDate datenow = LocalDate.now();
+        JLabel GreetingsText = new JLabel("LULOY HOTEL SYSTEM V1");
+        GreetingsText.setFont(new Font("Arial", Font.BOLD, 30));
+        GreetingsText.setForeground(Color.WHITE);
+        GreetingsText.setHorizontalAlignment(SwingConstants.LEFT);
         topPanel.add(GreetingsText);
         //topPanel.add(userIcon);
 
         main.add(topPanel, BorderLayout.NORTH);
         main.add(leftPanel, BorderLayout.WEST);
         main.add(centerPanel, BorderLayout.CENTER);
-
+		//
         leftPanel.setLayout(new GridLayout(0,1));
         leftPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
-
-        centerPanel.setBorder(BorderFactory.createTitledBorder("Page Content"));
+		//
+        //centerPanel.setBorder(BorderFactory.createTitledBorder("Page Content"));
         centerPanel.setLayout(new BorderLayout());
-
-        
-        
-
-        
+		//Initiate page buttons
         pageData.forEach((id, creator) -> {
+        	EmptyBorder margin = new EmptyBorder(10,10,10,10);
         	
             JButton button = new JButton(id);
+            String imagePath = pageIcon.get(id);
+            
             leftPanel.add(button);
 			button.setSize(new Dimension(100,100));
 			button.setBackground(Color.decode("#345947"));
 			button.setForeground(Color.WHITE);
 			
+			if (imagePath!=null){
+				String Iconpath = "C:/Users/Alexander/OneDrive/Documents/JCreator LE/MyProjects/luloy/src/"+imagePath;
+				File iconFile = new File(Iconpath);
+				//System.out.println("Page icon exist: " + iconFile.exists());
+				ImageIcon btnIcon = new ImageIcon(Iconpath);
+				
+				if (iconFile.exists()){
+					Image scaledIcon = btnIcon.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH);
+					button.setIcon(new ImageIcon(scaledIcon));
+				}
+			}
+			button.setFocusable(false);
             button.addActionListener(e -> {
                 JPanel newPage = creator.get(); 
                 navigate(id);
             });
         });
-        
-        navigate("Reservation");
+        navigate(defaultPage);
     }
     
     private static void InitiateDatabase () {
@@ -103,6 +130,16 @@ public class luloy {
     	pageData.put("Guest", GuestPage::new);
         pageData.put("Rooms", RoomsPage::new);
         pageData.put("Reservation", ReservationPage::new);
+        pageData.put("Logs", LogsPage::new);
+        
+        //Page icon data
+        /*
+        Note: The icon(png/jpg) must be placed inside src/ Directory
+        */
+        pageIcon.put("Guest", "guest.png");
+        pageIcon.put("Rooms", "double-bed.png");
+        pageIcon.put("Reservation", "reservation.png");
+        pageIcon.put("Logs", "file.png");
         
         //Sample guests
     	database.addGuest("Reymart Centeno", "reymartcenteno03@gmail.com", "09129927548");
@@ -110,28 +147,50 @@ public class luloy {
         database.addGuest("Jerdick Borbits", "jerdickborbon02@gmail.com", "---");
         database.addGuest("Alexander Pinapit", "marlborored4life@gmail.com", "---");
         
-        //Reservation Initiation
+        //Reservation data
+        database.addReservation("G0", "SR", 2.00, database.getDate(12,15));
         
+        //Rooms data
+        database.RoomTypes.put("SR", "Single Room");
+        database.RoomTypes.put("DR", "Double Room");
+        database.RoomTypes.put("TR", "Triple Room");
+        database.RoomTypes.put("FR", "Family Room");
         
-        database.addReservation("G2", "SR", 8, 6);
-        database.addReservation("G3", "SR", 8, 6);
-        database.addReservation("G1", "SR", 8, 6);
+        database.RoomtypeRates.put("SR", 1000.00);
+        database.RoomtypeRates.put("DR", 2500.00);
+        database.RoomtypeRates.put("TR", 3500.00);
+        database.RoomtypeRates.put("FR", 5000.00);
+        
+        database.RoomStatus.put("V", "Vacant");
+        database.RoomStatus.put("O", "Occupied");
+        database.RoomStatus.put("OOO", "Out of Order");
+        
+        database.RoomTypes.forEach((id, name)->{
+        	LinkedHashMap<String, Room> newTypeData = new LinkedHashMap<>();
+        	for (int x = 0; x <= 10; x++){
+        		String roomid = id+"_"+x;
+        		Room newRoom = new Room(roomid, id);
+        		newRoom.Status = "V";
+        		newRoom.Type = id;
+        		newRoom.Id = roomid;
+        		newTypeData.put(roomid, newRoom);
+        	}
+        	database.roomsData.put(id, newTypeData);
+        });
+       	
+        //System.out.println(database.roomsData);
     }
     
     public static void navigate(String id){
-    	
     	if (pageData.get(id)==null){
     		System.out.println("Page not found.");
     	} else {
     		JPanel newPage = pageData.get(id).get();
-    	
     		centerPanel.removeAll();
         	centerPanel.add(newPage, BorderLayout.CENTER);
         	centerPanel.revalidate();
         	centerPanel.repaint();
-    	}
-    	
-    	
+    	}	
     }
 }
 

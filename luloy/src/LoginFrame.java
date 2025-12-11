@@ -12,6 +12,9 @@ public class LoginFrame extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     
+    private String user = "admin";
+    private String pass = "1234";
+    
     public LoginListener listener;
 
     public LoginFrame(LoginListener argListener) {
@@ -21,7 +24,14 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null);   // center window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-
+		String path = "C:/Users/Alexander/OneDrive/Documents/JCreator LE/MyProjects/luloy/src/login.png";
+		ImageIcon icon = new ImageIcon(path);
+		JLabel userIcon = new JLabel();
+        userIcon.setPreferredSize(new Dimension(50,50));
+        Image img = icon.getImage();
+		Image scaled = img.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+		userIcon.setIcon(new ImageIcon(scaled));
+        setIconImage(icon.getImage());
         // main panel
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -63,7 +73,7 @@ public class LoginFrame extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (username.equals("admin") && password.equals("1234")) {
+        if (username.equals(user) && password.equals(pass)) {
             JOptionPane.showMessageDialog(this, "Login Successful!");
             this.listener.status("SUCCESS");
             dispose();
@@ -73,9 +83,5 @@ public class LoginFrame extends JFrame {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    public static void main(String[] args) {
-        //Code
     }
 }

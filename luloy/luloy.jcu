@@ -12,10 +12,19 @@
 				<path>classes</path>
 			</folderitem>
 			<folderitem>
+				<path>classes\classes</path>
+			</folderitem>
+			<folderitem>
+				<path>classes\myclass</path>
+			</folderitem>
+			<folderitem>
+				<path>classes\assets</path>
+			</folderitem>
+			<folderitem>
 				<path>src</path>
 			</folderitem>
 			<folderitem>
-				<path>assets</path>
+				<path>src\assets</path>
 			</folderitem>
 		</project>
 	</projects>
@@ -24,7 +33,7 @@
 			<path>src\luloy.java</path>
 			<source>true</source>
 			<index>0</index>
-			<active>false</active>
+			<active>true</active>
 		</docitem>
 		<docitem>
 			<path>src\LoginFrame.java</path>
@@ -54,7 +63,7 @@
 			<path>src\ReservationPage.java</path>
 			<source>true</source>
 			<index>5</index>
-			<active>true</active>
+			<active>false</active>
 		</docitem>
 		<docitem>
 			<path>src\Guest.java</path>
@@ -72,6 +81,12 @@
 			<path>src\Room.java</path>
 			<source>true</source>
 			<index>8</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>src\checkin.java</path>
+			<source>true</source>
+			<index>9</index>
 			<active>false</active>
 		</docitem>
 	</open_files>

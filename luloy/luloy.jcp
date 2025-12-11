@@ -36,8 +36,15 @@
 				<path>src</path>
 			</folderitem>
 			<folderitem>
+				<path>src\assets</path>
+			</folderitem>
+			<folderitem>
 				<path>assets</path>
 			</folderitem>
+			<fileitem>
+				<path>src\Checkin.java</path>
+				<folder>src</folder>
+			</fileitem>
 			<fileitem>
 				<path>src\database.java</path>
 				<folder>src</folder>
@@ -75,23 +82,10 @@
 				<folder>src</folder>
 			</fileitem>
 			<fileitem>
-				<path>src\user.png</path>
-				<folder>src</folder>
+				<path>src\assets\list.png</path>
+				<folder>src\assets</folder>
 			</fileitem>
 		</include>
 	</files>
-	<tasks>
-		<todotaskitem>
-			<description>TODO code application logic here</description>
-			<filepath>src\RoomsPage.java</filepath>
-			<line>28</line>
-			<timestamp>1764394987</timestamp>
-		</todotaskitem>
-		<todotaskitem>
-			<description>TODO code application logic here</description>
-			<filepath>src\ReservationPage.java</filepath>
-			<line>84</line>
-			<timestamp>1764633030</timestamp>
-		</todotaskitem>
-	</tasks>
+	<tasks/>
 </project>

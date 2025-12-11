@@ -1,10 +1,3 @@
-/**
- * @(#)GuestPage.java
- *
- *
- * @author 
- * @version 1.00 2025/11/26
- */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,10 +5,6 @@ import java.util.*;
 import java.util.regex.*;
 
 public class GuestPage extends JPanel {
-        
-    /**
-     * Creates a new instance of <code>GuestPage</code>.
-     */
      private static JPanel GuestList = new JPanel();
 	 private static JPanel ActionsPanel = new JPanel();
 	 
@@ -69,9 +58,10 @@ public class GuestPage extends JPanel {
         panel.add(nameLabel, gbc);
 
         gbc.gridx = 1;
-        nameLabelField = new JLabel("Guest Name Here.");
+        nameLabelField = new JLabel("---");
+        nameLabelField.setHorizontalAlignment(SwingConstants.LEFT);
+        nameLabelField.setBackground(Color.ORANGE);
         panel.add(nameLabelField, gbc);
-
         
         gbc.gridx = 0; gbc.gridy = 1;
         JLabel emailLabel = new JLabel("Email: ");
@@ -80,10 +70,9 @@ public class GuestPage extends JPanel {
         panel.add(emailLabel, gbc);
 
         gbc.gridx = 1;
-        emailLabelField = new JLabel("Guest Email Here.", SwingConstants.LEFT);
+        emailLabelField = new JLabel("---", SwingConstants.LEFT);
         panel.add(emailLabelField, gbc);
 
-        
         
         gbc.gridx = 0; gbc.gridy = 2;
         JLabel contactLabel = new JLabel("Contact: ");
@@ -91,7 +80,7 @@ public class GuestPage extends JPanel {
         panel.add(contactLabel, gbc);
         
         gbc.gridx = 1; gbc.gridy = 2;
-        contactLabelField = new JLabel("Contact number here");
+        contactLabelField = new JLabel("---");
         panel.add(contactLabelField, gbc);
         
         
@@ -108,6 +97,8 @@ public class GuestPage extends JPanel {
     	GuestList.removeAll();
         database.guestsDB.forEach((id, person)->{
     		JButton button = new JButton();
+    		
+    		button.setBackground(getStatusColor(person.getStatus()));
     		button.setText(person.getId());
     		GuestList.add(button);
     		button.addActionListener(e -> showInfo(person));
@@ -131,10 +122,15 @@ public class GuestPage extends JPanel {
     				if (findGuest==null){
     					JOptionPane.showMessageDialog(null, "Couldn't find guest with Id: "+guestId, "Error", JOptionPane.ERROR_MESSAGE);
     				} else {
-    					database.removeGuest(guestId);
-    					JOptionPane.showMessageDialog(null, "Successfully removed guest with Id: "+guestId, "Success", JOptionPane.INFORMATION_MESSAGE);
-    					luloy.navigate("Guest");
-    					break;
+    					
+    					if (findGuest.getStatus() == 1 || findGuest.getStatus() == 2){
+    						JOptionPane.showMessageDialog(null, "Invalid guest status.", "Error", JOptionPane.ERROR_MESSAGE);
+    					} else {
+    						database.removeGuest(guestId);
+    						JOptionPane.showMessageDialog(null, "Successfully removed guest with Id: "+guestId, "Success", JOptionPane.INFORMATION_MESSAGE);
+    						luloy.navigate("Guest");
+    						break;
+    					}	
     				}
     			}
     		}
@@ -151,6 +147,7 @@ public class GuestPage extends JPanel {
     		JButton addButton = new JButton("Submit");
     		
     		JFrame frame = new JFrame();
+    		database.openFrame(frame);
     		
     		frame.setTitle("Add new Guest");
     		frame.setSize(300,250);
@@ -202,7 +199,7 @@ public class GuestPage extends JPanel {
     			
     		});
     		
-    		frame.setVisible(true);
+    		//frame.setVisible(true);
     	});
     }
     
@@ -258,8 +255,23 @@ public class GuestPage extends JPanel {
     	nameLabelField.setText(guest.getName());
     	emailLabelField.setText(guest.getEmail());
     	luloy.navigate("Guest");
-   	    }
-    /**
-     * @param args the command line arguments
-     */
+   	}
+   	
+   	private static Color getStatusColor (int stat){
+   		switch (stat){
+   			case 0:
+   				return Color.WHITE;
+   				
+   			case 1:
+   				return Color.GREEN;
+   				
+   			case 2:
+   				return Color.ORANGE;
+   				
+   			default:
+   				return Color.WHITE;
+   				
+   		}
+   	}
+   
 }

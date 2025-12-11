@@ -1,18 +1,13 @@
-/**
- * @(#)Reserve.java
- *
- *
- * @author 
- * @version 1.00 2025/12/1
- */
-
+import java.util.Calendar;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Reserve {
 	
 	public Guest reservedGuest;
 	public String RoomType = "";
-	public int month = 0;
-	public int day = 0;
+	public double nights;
+	public Date date;
 
     public Reserve(String guestId) {
     	Guest checkGuest = database.getGuest(guestId);
@@ -20,7 +15,12 @@ public class Reserve {
     	if (checkGuest == null){
     		System.out.println("Guest not found.");
     	} else {
-    		System.out.println("Guest found: "+checkGuest.getName());
+    		
+    		if (checkGuest.getStatus() == 0){
+    			System.out.println("Guest found: "+checkGuest.getName());
+    		} else {
+    			System.out.println("Invalid guest status: "+checkGuest.getStatus());
+    		}
     		reservedGuest = checkGuest;
     	}
     }
