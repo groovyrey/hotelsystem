@@ -16,8 +16,10 @@ public class RoomsPage extends JPanel {
    	private static JPanel roomInfoActions = new JPanel();
    	private static String receipt="";
    	private static JButton checkout = new JButton("Checkout");
-    	
+    private static JButton disableBtn = new JButton("Disable");	
+    private static JButton enableBtn = new JButton("Enable");	
    	private static JButton checkin = new JButton("Checkin");
+   	
     
     public RoomsPage() {
     	setLayout(new BorderLayout(5,5));
@@ -32,40 +34,58 @@ public class RoomsPage extends JPanel {
     		switch(currentRoom.Status){
     			case "V":
     				//System.out.println("Vacant");
+    				
+		    		disableBtn.setBackground(Color.red);
+		    		disableBtn.setForeground(Color.white);
+		    		roomInfoActions.add(disableBtn);
     				checkin = new JButton("Check-in");
     				checkin.setBackground(Color.GREEN);
-    				checkin.setForeground(Color.WHITE);
+    				//checkin.setForeground(Color.WHITE);
     				roomInfoActions.add(checkin);
     				break;
     			case "O":
     				//System.out.println("Occupied");
-    				
     				checkout = new JButton("Check-out");
     				checkout.setBackground(Color.RED);
-    				checkout.setForeground(Color.WHITE);
+    				//checkout.setForeground(Color.WHITE);
     				roomInfoActions.add(checkout);
-    				
     				break;
     			case "OOO":
+    				enableBtn.setBackground(Color.green);
+		    		enableBtn.setForeground(Color.black);
+		    		roomInfoActions.add(enableBtn);
     				//System.out.println("Out of order");
     				break;
     				
     			default:
-    				System.out.println("Unknown status");
+    				//System.out.println("Unknown status");
     				break;
     		}
+    		disableBtn.addActionListener(dis -> {
+    			currentRoom.Status = "OOO";
+    			luloy.navigate("Rooms");
+    		});
+    		enableBtn.addActionListener(dis -> {
+    			currentRoom.Status = "V";
+    			luloy.navigate("Rooms");
+    		});
+    		
+    		
     		checkin.addActionListener(b -> {
     			JFrame checkinFrame = new JFrame();
     			database.openFrame(checkinFrame);
     			JTextField guestIdLabel = new JTextField(10);
     			checkinFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    			checkinFrame.setSize(300,250);
     			checkinFrame.setLocationRelativeTo(null);
     			SpinnerNumberModel num = new SpinnerNumberModel(1.00, 1.00, 30.00, 1);
     			JSpinner nightsSelector = new JSpinner(num);
+    			JSpinner.NumberEditor nightseditor = (JSpinner.NumberEditor) nightsSelector.getEditor();
+    			nightseditor.getTextField().setEditable(false);
     			JButton confirm = new JButton("Check-In");
     			
-    			checkinFrame.setTitle("Check-In");
-    			checkinFrame.setSize(300,250);
+    			checkinFrame.setTitle("Check-In: "+currentRoom.Id);
+    			
     			checkinFrame.setLayout(new GridBagLayout());
     			
     			GridBagConstraints gbc = new GridBagConstraints();
@@ -88,14 +108,11 @@ public class RoomsPage extends JPanel {
     			
     			confirm.addActionListener(e -> {
     				boolean check = validate(guestIdLabel.getText(), Double.parseDouble(nightsSelector.getValue().toString()), currentType);
-    				
     				if (check){
     					luloy.navigate("Rooms");
     					checkinFrame.dispose();
     				}
     			});
-    			
-    			//checkinFrame.setVisible(true);
     		});
     		
     		checkout.addActionListener(cancel -> {
@@ -137,10 +154,7 @@ public class RoomsPage extends JPanel {
     							JOptionPane.showMessageDialog(null, "Insufficient amount.", "Error", JOptionPane.ERROR_MESSAGE);
     						}
     					}
-    					
-    					
     				}
-    				
     			} else {
     				System.out.println("Cancelled");
     			}
@@ -154,8 +168,7 @@ public class RoomsPage extends JPanel {
     	topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
     	centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
     	
-    	JLabel dropdownLabel = new JLabel("Select Type: ");
-    	JButton selectButton = new JButton("Select");
+    	JLabel dropdownLabel = new JLabel("Room Type: ");
     	String[] roomtypes = {
     		"SR",
     		"DR",
@@ -164,14 +177,17 @@ public class RoomsPage extends JPanel {
     	};
     	JComboBox<String> dropdown = new JComboBox<>(roomtypes);
     	dropdown.setSelectedItem(currentType);
+    	dropdown.addActionListener(changed -> {
+    		currentType = (String)dropdown.getSelectedItem();
+    		luloy.navigate("Rooms");
+    	});
+    	
     	topPanel.add(dropdownLabel);
     	topPanel.add(dropdown);
-    	topPanel.add(selectButton);
     	roomInfoCenter.add(roomIdLabel);
     	roomInfoCenter.add(roomStatusLabel);
     	
     	roomInfoPanel.setLayout(new BorderLayout(5,5));
-    	//roomInfoPanel.add(infoTitle, BorderLayout.NORTH);
     	roomInfoPanel.add(roomInfoCenter, BorderLayout.CENTER);
     	roomInfoPanel.add(roomInfoActions, BorderLayout.SOUTH);
     	
@@ -182,13 +198,11 @@ public class RoomsPage extends JPanel {
     		
     		JLabel roomId = new JLabel(" "+room.Id+" ");
     		JLabel roomStatus = new JLabel(" "+room.Status+" ");
-    		JButton roomName = new JButton(database.RoomTypes.get(room.Type)+" | "+roomNumber);
+    		JButton roomName = new JButton("ROOM "+roomNumber+" ("+database.RoomStatus.get(room.Status)+")");
     		
     		itemPanel.setLayout(new BorderLayout(5,5));
     		
-    		roomName.setBackground(getStatusColor(room.Status));
-    		roomId.setBackground(getStatusColor(room.Status));
-    		roomStatus.setBackground(getStatusColor(room.Status));
+    		setStatusColor(room.Status, roomName);
     		
     		roomId.setBorder(line);
     		roomName.setBorder(line);
@@ -197,7 +211,6 @@ public class RoomsPage extends JPanel {
     		
     		itemPanel.add(roomId, BorderLayout.WEST);
     		itemPanel.add(roomName, BorderLayout.CENTER);
-    		//itemPanel.add(roomStatus, BorderLayout.EAST);
     		
     		roomName.addActionListener(a -> {
     			
@@ -205,14 +218,8 @@ public class RoomsPage extends JPanel {
     		});
     		
     		centerPanel.add(itemPanel);
-    		//System.out.println(id+": "+room+" - "+room.Type);
     	});
     	
-    	selectButton.addActionListener(e -> {
-    		String selectedType = (String) dropdown.getSelectedItem();
-    		currentType = selectedType;
-    		luloy.navigate("Rooms");
-    	});
     	
     	add(topPanel, BorderLayout.NORTH);
     	add(centerPanel, BorderLayout.CENTER);
@@ -228,30 +235,31 @@ public class RoomsPage extends JPanel {
     	}
     }
     
-    private static Color getStatusColor (String status){
+    private static void setStatusColor (String status, JButton target){
     	switch (status){
     		case "V":
-    			return Color.WHITE;
+    			target.setOpaque(false);
+    			target.setBackground(Color.white);
+    			break;
     		case "O":
-    			return Color.GREEN;
+    			target.setBackground(Color.green);
+    			break;
     		case "OOO":
-    			return Color.RED;
+    			target.setBackground(Color.orange);
+    			break;
     		default:
-    			return Color.WHITE;
-    			
+    			target.setBackground(Color.red);
+    			break;
     	}
     }
     
     private static boolean validate (String guestId, double nights, String roomtype) {
     	Guest target = database.getGuest(guestId);
     	
-    	
-    	
     	if (target==null){
     		JOptionPane.showMessageDialog(null, "Invalid guestId", "Error", JOptionPane.ERROR_MESSAGE);
     		return false;
     	} else {
-    		
     		if (target.getStatus() == 2){
     			JOptionPane.showMessageDialog(null,"Guest reserved, Please go to reservation and checkin.", "Error", JOptionPane.ERROR_MESSAGE);
     		} else {
@@ -263,10 +271,7 @@ public class RoomsPage extends JPanel {
     			} else {
     				return false;
     			}	
-    		}
-    		
-    		
-    		
+    		}	
     	}
     	return false;
     }

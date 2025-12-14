@@ -154,14 +154,12 @@ public class database {
     		frame.addWindowListener(new WindowAdapter() {
     			@Override
     			public void windowClosing(WindowEvent e) {
-        			//System.out.println("Window is closing...");
+    				openwindow = false;
     			}
 
     			@Override
     			public void windowClosed(WindowEvent e) {
     				openwindow = false;
-    				
-        			//System.out.println("Window fully closed!");
     			}
 			});
 			return true;

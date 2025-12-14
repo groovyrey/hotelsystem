@@ -8,7 +8,6 @@ public class GuestPage extends JPanel {
      private static JPanel GuestList = new JPanel();
 	 private static JPanel ActionsPanel = new JPanel();
 	 
-	 //Add new guest components
 	 private static JTextField nameField;
      private static JTextField emailField;
      private static JTextField contactField;
@@ -18,6 +17,7 @@ public class GuestPage extends JPanel {
      private static JLabel nameLabelField;
      private static JLabel emailLabelField;
      private static JLabel contactLabelField;
+     private static JLabel roomLabel;
      
      private static String errorMsg = "Reason: ";
      
@@ -33,8 +33,8 @@ public class GuestPage extends JPanel {
     	JPanel panel = new JPanel(new GridBagLayout());
     	ActionsPanel.setLayout(new FlowLayout());
     	
-    	JButton addGuest = new JButton("Add Guest");
-    	JButton removeGuest = new JButton("Remove Guest");
+    	JButton addGuest = new JButton("[+] Add Guest");
+    	JButton removeGuest = new JButton("[x] Remove Guest");
     	
     	ActionsPanel.add(addGuest);
     	ActionsPanel.add(removeGuest);
@@ -45,8 +45,6 @@ public class GuestPage extends JPanel {
     	add(ActionsPanel, BorderLayout.NORTH);
     	add(GuestList, BorderLayout.EAST);
     	add(panel, BorderLayout.CENTER);
-    	
-    	//Show User Data
     	
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -83,6 +81,12 @@ public class GuestPage extends JPanel {
         contactLabelField = new JLabel("---");
         panel.add(contactLabelField, gbc);
         
+        gbc.gridx = 0; gbc.gridy = 3;
+        panel.add(new JLabel("Room: "), gbc);
+        
+        gbc.gridx = 1; gbc.gridy = 3;
+        roomLabel = new JLabel("--");
+        panel.add(roomLabel, gbc);
         
         gbc.anchor = GridBagConstraints.CENTER;
 
@@ -92,6 +96,7 @@ public class GuestPage extends JPanel {
     		nameLabelField.setText(currentGuest.getName());
     		emailLabelField.setText(currentGuest.getEmail());
     		contactLabelField.setText(currentGuest.getContact());
+    		roomLabel.setText(currentGuest.getRoom()==null?"None":currentGuest.getRoom().Id);
     	}
 
     	GuestList.removeAll();
@@ -198,8 +203,6 @@ public class GuestPage extends JPanel {
     			}
     			
     		});
-    		
-    		//frame.setVisible(true);
     	});
     }
     

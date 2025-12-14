@@ -27,6 +27,7 @@ public class LogsPage extends JPanel {
         };
         JTable table = new JTable(model);
         table.getTableHeader().setEnabled(false);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = new JScrollPane(table);
     	add(scroll, BorderLayout.CENTER);
     	

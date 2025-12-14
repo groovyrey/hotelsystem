@@ -24,7 +24,7 @@ public class luloy {
     private static JPanel topPanel = new JPanel();
     private static LinkedHashMap<String, Supplier<JPanel>> pageData = new LinkedHashMap<>();
     private static HashMap<String, String> pageIcon = new HashMap<>();
-    
+    private static int count = 1;
     private static String defaultPage = "Reservation";
     
     //Dev Configurations
@@ -51,19 +51,22 @@ public class luloy {
 
     private static void runApplication() {
         InitiateDatabase();
+        String workingDir = System.getProperty("user.dir");
+        System.out.println("Current Working Directory: " + workingDir);
         
-        //Default page section
         topPanel.setBackground(Color.decode("#548A70"));
         leftPanel.setBackground(Color.decode("#548A70"));
-        String path = "C:/Users/Alexander/OneDrive/Documents/JCreator LE/MyProjects/luloy/src/resort.png";
+        String path = "C:/Users/Administrator/Documents/JCreator Pro/MyProjects/luloy/src/resort.png";
 		ImageIcon icon = new ImageIcon(path);
 		JLabel userIcon = new JLabel();
         userIcon.setPreferredSize(new Dimension(50,50));
         
+        File check = new File(path);
+        System.out.println(check.exists());
+        
         Image img = icon.getImage();
 		Image scaled = img.getScaledInstance(50,50,Image.SCALE_SMOOTH);
 		userIcon.setIcon(new ImageIcon(scaled));
-		
 		
         main.setTitle("Main Page");
        
@@ -73,7 +76,6 @@ public class luloy {
         main.setVisible(true);
         main.setLayout(new BorderLayout(5, 5));
         main.setIconImage(icon.getImage());
-		//userIcon.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 		topPanel.add(userIcon);
 
 		LocalDate datenow = LocalDate.now();
@@ -82,18 +84,18 @@ public class luloy {
         GreetingsText.setForeground(Color.WHITE);
         GreetingsText.setHorizontalAlignment(SwingConstants.LEFT);
         topPanel.add(GreetingsText);
-        //topPanel.add(userIcon);
 
         main.add(topPanel, BorderLayout.NORTH);
         main.add(leftPanel, BorderLayout.WEST);
         main.add(centerPanel, BorderLayout.CENTER);
-		//
+
         leftPanel.setLayout(new GridLayout(0,1));
-        leftPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
-		//
-        //centerPanel.setBorder(BorderFactory.createTitledBorder("Page Content"));
+        TitledBorder lab = BorderFactory.createTitledBorder("Actions");
+        lab.setTitleColor(Color.white);
+        leftPanel.setBorder(lab);
+		
         centerPanel.setLayout(new BorderLayout());
-		//Initiate page buttons
+
         pageData.forEach((id, creator) -> {
         	EmptyBorder margin = new EmptyBorder(10,10,10,10);
         	
@@ -106,9 +108,8 @@ public class luloy {
 			button.setForeground(Color.WHITE);
 			
 			if (imagePath!=null){
-				String Iconpath = "C:/Users/Alexander/OneDrive/Documents/JCreator LE/MyProjects/luloy/src/"+imagePath;
+				String Iconpath = "C:/Users/Administrator/Documents/JCreator Pro/MyProjects/luloy/src/"+imagePath;
 				File iconFile = new File(Iconpath);
-				//System.out.println("Page icon exist: " + iconFile.exists());
 				ImageIcon btnIcon = new ImageIcon(Iconpath);
 				
 				if (iconFile.exists()){
@@ -127,9 +128,9 @@ public class luloy {
     
     private static void InitiateDatabase () {
     	//Page data initiation
+    	pageData.put("Reservation", ReservationPage::new);
     	pageData.put("Guest", GuestPage::new);
         pageData.put("Rooms", RoomsPage::new);
-        pageData.put("Reservation", ReservationPage::new);
         pageData.put("Logs", LogsPage::new);
         
         //Page icon data
@@ -140,30 +141,31 @@ public class luloy {
         pageIcon.put("Rooms", "double-bed.png");
         pageIcon.put("Reservation", "reservation.png");
         pageIcon.put("Logs", "file.png");
-        
         //Sample guests
     	database.addGuest("Reymart Centeno", "reymartcenteno03@gmail.com", "09129927548");
+    	
         database.addGuest("Eljay Oblino", "eljayobloloy@gmail.com", "---");
         database.addGuest("Jerdick Borbits", "jerdickborbon02@gmail.com", "---");
         database.addGuest("Alexander Pinapit", "marlborored4life@gmail.com", "---");
         
         //Reservation data
         database.addReservation("G0", "SR", 2.00, database.getDate(12,15));
-        
         //Rooms data
         database.RoomTypes.put("SR", "Single Room");
         database.RoomTypes.put("DR", "Double Room");
         database.RoomTypes.put("TR", "Triple Room");
         database.RoomTypes.put("FR", "Family Room");
-        
+        //Room rates data
         database.RoomtypeRates.put("SR", 1000.00);
         database.RoomtypeRates.put("DR", 2500.00);
         database.RoomtypeRates.put("TR", 3500.00);
         database.RoomtypeRates.put("FR", 5000.00);
-        
+        //Room statuses data
         database.RoomStatus.put("V", "Vacant");
         database.RoomStatus.put("O", "Occupied");
         database.RoomStatus.put("OOO", "Out of Order");
+        //Initial example data
+        
         
         database.RoomTypes.forEach((id, name)->{
         	LinkedHashMap<String, Room> newTypeData = new LinkedHashMap<>();
@@ -175,10 +177,10 @@ public class luloy {
         		newRoom.Id = roomid;
         		newTypeData.put(roomid, newRoom);
         	}
+        	count++;
+        	
         	database.roomsData.put(id, newTypeData);
         });
-       	
-        //System.out.println(database.roomsData);
     }
     
     public static void navigate(String id){
