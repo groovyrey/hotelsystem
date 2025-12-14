@@ -7,9 +7,7 @@ public class LogsPage extends JPanel {
 
     public LogsPage() {
     	setLayout(new BorderLayout());
-    	
     	JPanel itemPanel = new JPanel();
-    	
     	itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.PAGE_AXIS));
     	add(itemPanel);
     	
@@ -43,12 +41,6 @@ public class LogsPage extends JPanel {
     		logPanel.add(msgLabel, BorderLayout.CENTER);
     		
     		model.addRow(new Object[]{log.logtime, log.message});
-    		
-    		//itemPanel.add(logPanel);
-    	});
-    	
-    	
+    	});	
     }
-    
-    
 }

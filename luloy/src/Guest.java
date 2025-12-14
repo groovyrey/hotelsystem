@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 public class Guest {
 	
 	private String name = "";
@@ -14,7 +16,7 @@ public class Guest {
     		this.name = guestName;
     		this.email = guestEmail;
     		this.contact = guestContact;
-    		this.id = "G"+database.GuestCount;
+    		this.id = guestEmail;
     		database.GuestCount++;
     	}
     }

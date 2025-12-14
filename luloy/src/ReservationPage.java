@@ -24,12 +24,12 @@ public class ReservationPage extends JPanel {
     	JLabel PageTitle = new JLabel("Reservation Page");
     	
     	JButton addReservation = new JButton("New Reservation");
+    	database.setButtonIcon(addReservation, "add-button.png", 20);
+    	addReservation.setBackground(Color.decode("#548A70"));
+    	addReservation.setForeground(Color.white);
     	
-    	topPanel.setLayout(new FlowLayout());
-    	//topPanel.add(PageTitle);
+    	topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
     	topPanel.add(addReservation);
-    	
-    	//centerPanel.setBackground(Color.GRAY);
     	centerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
     	
     	add(rightPanel, BorderLayout.EAST);
@@ -37,10 +37,6 @@ public class ReservationPage extends JPanel {
     	add(centerPanel, BorderLayout.CENTER);
         JPanel resPanel = new JPanel();
     	resPanel.setLayout(new GridLayout(0,1));
-    	/*
-    	resPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        resPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        */
         centerPanel.setLayout(new GridLayout(0,1));
         centerPanel.add(resPanel);
         Object[][] data = {};
@@ -68,7 +64,7 @@ public class ReservationPage extends JPanel {
 		        	JTable target = (JTable) e.getSource();
 		        	String id = (String) table.getValueAt(target.getSelectedRow(), 0);
 		        	Reserve reserve = database.reservationData.get(id);
-		        	
+		        	table.clearSelection();
 		        	if (reserve!=null){
 		        		int choice = JOptionPane.showConfirmDialog(
 		                null,
@@ -130,6 +126,7 @@ public class ReservationPage extends JPanel {
 	            			boolean isRemoved = database.removeReservation(id);
 	            			
 	            			if (isRemoved){
+	            				database.removeGuest(reserve.reservedGuest.getId());
 	            				luloy.navigate("Reservation");
 	            				JOptionPane.showMessageDialog(null,"Reservation removed!","Success!",JOptionPane.INFORMATION_MESSAGE);
 	            			} else {
@@ -154,33 +151,6 @@ public class ReservationPage extends JPanel {
     			reserve.reservedGuest.getEmail(),
     			reserve.RoomType,
     			reserve.date.toLocaleString()
-    		});
-    		
-    		JPanel itemPanel = new JPanel();
-    		itemPanel.setLayout(new GridLayout(0,10));
-    		JButton viewButton = new JButton (id);
-    
-    		viewButton.setOpaque(false);
-    		viewButton.setBackground(Color.RED);
-    		viewButton.setFocusable(false);
-    		
-    		JLabel nameLabel = new JLabel(reserve.reservedGuest.getEmail());
-    		JLabel roomType = new JLabel(reserve.RoomType);
-    		JLabel date = new JLabel(reserve.date.toLocaleString().split(",")[0]);
-    		
-    		EmptyBorder margin = new EmptyBorder(5,5,5,5);
-    		itemPanel.setBorder(margin);
-    		nameLabel.setBorder(margin);
-    		
-    		itemPanel.add(viewButton);
-    		itemPanel.add(nameLabel);
-    		itemPanel.add(roomType);
-    		itemPanel.add(date);
-    		
-    		//resPanel.add(itemPanel);
-    		
-    		viewButton.addActionListener(e -> {
-    			
     		});
     	});
     	

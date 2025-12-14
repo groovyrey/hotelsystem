@@ -135,7 +135,6 @@ public class RoomsPage extends JPanel {
     						double amount = Double.parseDouble(cash);
     						if (amount >= totalCosts){
     							JOptionPane.showMessageDialog(null, "Payment Success!", "Success", JOptionPane.INFORMATION_MESSAGE);
-    							
     							receipt+="Receipt: \n";
     							for (int x = 0; x < 20; x++){
     								receipt+="---";
@@ -147,7 +146,6 @@ public class RoomsPage extends JPanel {
     								receipt+="---";
     							}
     							JOptionPane.showMessageDialog(null, receipt, "Receipt", JOptionPane.PLAIN_MESSAGE);
-    							
     							database.checkOut(currentRoom.guest.getId(), data);
     							break;
     						} else {
@@ -181,6 +179,8 @@ public class RoomsPage extends JPanel {
     		currentType = (String)dropdown.getSelectedItem();
     		luloy.navigate("Rooms");
     	});
+    	dropdown.setBackground(Color.decode("#548A70"));
+    	dropdown.setForeground(Color.white);
     	
     	topPanel.add(dropdownLabel);
     	topPanel.add(dropdown);
